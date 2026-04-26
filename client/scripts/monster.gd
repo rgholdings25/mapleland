@@ -1,31 +1,27 @@
 extends CharacterBody2D
 
-@export var max_health: int = 3
-@export var gravity: float = 1200.0
+var hp := 3
+var hit_flash_time := 0.0
+var knockback_velocity := 0.0
 
-@onready var body: Polygon2D = $Body
-
-var health: int
-var hit_flash_remaining := 0.0
-
-func _ready() -> void:
-	health = max_health
+@onready var sprite: Sprite2D = $Sprite2D
 
 func _physics_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity.y += gravity * delta
-
-	if hit_flash_remaining > 0.0:
-		hit_flash_remaining -= delta
-		body.color = Color(1, 0.9, 0.2, 1)
+	if hit_flash_time > 0.0:
+		hit_flash_time -= delta
+		sprite.modulate = Color(1, 1, 1, 1)
 	else:
-		body.color = Color(0.9, 0.2, 0.25, 1)
+		sprite.modulate = Color(1, 0.5, 0.5, 1)
 
+	velocity.x = knockback_velocity
+	knockback_velocity = move_toward(knockback_velocity, 0.0, 900.0 * delta)
 	move_and_slide()
 
-func take_damage(amount: int) -> void:
-	health -= amount
-	hit_flash_remaining = 0.12
+func _on_hit(damage := 1, hit_direction := 1.0) -> void:
+	hp -= damage
+	hit_flash_time = 0.12
+	knockback_velocity = hit_direction * 220.0
+	print("Monster hit. HP:", hp)
 
-	if health <= 0:
+	if hp <= 0:
 		queue_free()

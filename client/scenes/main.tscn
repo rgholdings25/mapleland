@@ -1,37 +1,44 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://main_scene"]
 
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/monster.tscn" id="2_monster"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/monster.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/input_settings.gd" id="3"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
-size = Vector2(960, 48)
-
-[sub_resource type="Environment" id="Environment_world"]
-background_mode = 1
-background_color = Color(0.08, 0.1, 0.14, 1)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(1000, 50)
 
 [node name="Main" type="Node2D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_world")
+[node name="BackgroundMarkerA" type="Polygon2D" parent="."]
+position = Vector2(0, 0)
+color = Color(0.18, 0.22, 0.3, 1)
+polygon = PackedVector2Array(0, 0, 80, 0, 80, 600, 0, 600)
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(160, 280)
+[node name="BackgroundMarkerB" type="Polygon2D" parent="."]
+position = Vector2(320, 0)
+color = Color(0.12, 0.16, 0.24, 1)
+polygon = PackedVector2Array(0, 0, 80, 0, 80, 600, 0, 600)
 
-[node name="Monster" parent="." instance=ExtResource("2_monster")]
-position = Vector2(420, 360)
+[node name="BackgroundMarkerC" type="Polygon2D" parent="."]
+position = Vector2(640, 0)
+color = Color(0.18, 0.22, 0.3, 1)
+polygon = PackedVector2Array(0, 0, 80, 0, 80, 600, 0, 600)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-enabled = true
-position_smoothing_enabled = true
-position_smoothing_speed = 8.0
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector2(100, 300)
 
-[node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(480, 440)
+[node name="Monster" parent="." instance=ExtResource("2")]
+position = Vector2(500, 300)
 
-[node name="Ground" type="Polygon2D" parent="Floor"]
-color = Color(0.25, 0.8, 0.35, 1)
-polygon = PackedVector2Array(-480, -24, 480, -24, 480, 24, -480, 24)
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(400, 500)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-shape = SubResource("RectangleShape2D_floor")
+[node name="GroundVisual" type="Polygon2D" parent="Ground"]
+color = Color(0.25, 0.75, 0.3, 1)
+polygon = PackedVector2Array(-500, -25, 500, -25, 500, 25, -500, 25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="SettingsUI" type="CanvasLayer" parent="."]
+script = ExtResource("3")

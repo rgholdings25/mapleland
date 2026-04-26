@@ -1,0 +1,5 @@
+# Godot editor cache
+client/.godot/
+
+# Accidental nested Godot project folder
+client/mapleland/
