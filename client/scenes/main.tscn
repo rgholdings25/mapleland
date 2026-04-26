@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/monster.tscn" id="2_monster"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(960, 48)
+
+[sub_resource type="Environment" id="Environment_world"]
+background_mode = 1
+background_color = Color(0.08, 0.1, 0.14, 1)
+
+[node name="Main" type="Node2D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_world")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(160, 280)
+
+[node name="Monster" parent="." instance=ExtResource("2_monster")]
+position = Vector2(420, 360)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+enabled = true
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(480, 440)
+
+[node name="Ground" type="Polygon2D" parent="Floor"]
+color = Color(0.25, 0.8, 0.35, 1)
+polygon = PackedVector2Array(-480, -24, 480, -24, 480, 24, -480, 24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("RectangleShape2D_floor")
